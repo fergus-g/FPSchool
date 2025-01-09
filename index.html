@@ -19,17 +19,61 @@
       />
     </div>
     <div class="button-container">
-      <button>Create New Player</button>
-      <button>Create New Map</button>
-      <button>Show Leaderboard</button>
+      <button id="create-player-btn">Create New Player</button>
+      <button id="create-map-btn">Create New Map</button>
+      <button id="leader-btn">Toggle Leaderboard</button>
+      <button id="map-btn">Maps</button>
     </div>
+    <!-- Hidden form for creating a new player -->
+    <div id="playerFormContainer" style="display: none">
+      <form id="playerForm">
+        <label for="player_name">Player Name:</label>
+        <input type="text" id="player_name" name="player_name" required />
+
+        <label for="kda">K/D/A:</label>
+        <input type="text" id="kda" name="kda" required />
+
+        <label for="favourite_weapon">Favourite Weapon:</label>
+        <input
+          type="text"
+          id="favourite_weapon"
+          name="favourite_weapon"
+          required
+        />
+
+        <label for="best_map">Best Map:</label>
+        <input type="text" id="best_map" name="best_map" required />
+
+        <label for="average_winrate">Average Winrate (%):</label>
+        <input
+          type="number"
+          id="average_winrate"
+          name="average_winrate"
+          min="0"
+          max="100"
+          required
+        />
+
+        <button type="submit">Submit</button>
+        <button type="button" id="cancelForm">Cancel</button>
+      </form>
+    </div>
+
+    <!-- Hidden form for creating a new map -->
+    <div id="mapFormContainer" style="display: none">
+      <form id="mapForm">
+        <label for="map_name">Map Name:</label>
+        <input type="text" id="map_name" name="map_name" required />
+
+        <button type="submit">Submit</button>
+        <button type="button" id="cancelForm">Cancel</button>
+      </form>
+    </div>
+
     <div class="content">
-      <ul>
-        <li></li>
-        <button class="btn" id="edit-btn">Edit</button>
-        <button class="btn" id="delete-btn">Delete</button>
-      </ul>
+      <ul class="list"></ul>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>

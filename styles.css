@@ -1,0 +1,185 @@
+/* Basic reset to remove default padding/margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4; /* Light background */
+  text-align: center; /* Center all text */
+  padding: 20px;
+}
+
+/* Header styles */
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Search bar styles */
+.search-container {
+  margin-bottom: 20px;
+}
+
+#searchbar {
+  width: 100%;
+  max-width: 600px; /* Ensure it doesn't stretch too wide */
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+#searchbar:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button container styles */
+.button-container {
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #003f7f;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternating row colors */
+}
+
+tr:nth-child(odd) {
+  background-color: white;
+}
+
+/* Form styling */
+#playerFormContainer,
+#mapFormContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: none; /* Hidden by default */
+}
+
+#playerFormContainer form,
+#mapFormContainer form {
+  display: flex;
+  flex-direction: column;
+}
+
+#playerForm label,
+#mapForm label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+#playerForm input,
+#mapForm input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#playerForm input:focus,
+#mapForm input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+#playerForm button,
+#mapForm button {
+  background-color: #28a745;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+#playerForm button[type="submit"],
+#mapForm button[type="submit"] {
+  background-color: #28a745;
+}
+
+#playerForm button[type="button"],
+#mapForm button[type="button"] {
+  background-color: #dc3545;
+  margin-left: 10px;
+}
+
+/* Form button hover effect */
+#playerForm button:hover,
+#mapForm button:hover {
+  opacity: 0.9;
+}
+
+/* For larger screens (responsive) */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.5rem;
+  }
+
+  #searchbar {
+    width: 90%;
+  }
+
+  table {
+    width: 90%;
+  }
+
+  #playerFormContainer,
+  #mapFormContainer {
+    width: 90%;
+  }
+}
