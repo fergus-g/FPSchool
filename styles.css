@@ -25,23 +25,65 @@ body {
 }
 
 /* Search bar styles */
+/* Updated Search Container Styles */
 .search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Space between elements */
   margin-bottom: 20px;
 }
 
-#searchbar {
-  width: 100%;
-  max-width: 600px; /* Ensure it doesn't stretch too wide */
+#heading-dropdown {
   padding: 10px;
   font-size: 1rem;
   border-radius: 25px;
   border: 1px solid #ccc;
   outline: none;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#heading-dropdown:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+#searchbar {
+  flex: 1; /* Allows the input to resize dynamically */
+  max-width: 400px; /* Limit the max width */
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #searchbar:focus {
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+.search-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 25px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.search-button:active {
+  background-color: #003f7f;
+  transform: scale(0.95);
 }
 
 /* Button container styles */
@@ -53,7 +95,7 @@ button {
   padding: 10px 20px;
   margin: 5px;
   font-size: 1rem;
-  border-radius: 25px;
+  border-radius: 10px;
   border: none;
   background-color: #007bff;
   color: white;
@@ -152,10 +194,14 @@ tr:nth-child(odd) {
   background-color: #28a745;
 }
 
+#playerForm button[id="update"],
+#mapForm button[id="update"] {
+  background-color: #28a745;
+}
+
 #playerForm button[type="button"],
 #mapForm button[type="button"] {
   background-color: #dc3545;
-  margin-left: 10px;
 }
 
 /* Form button hover effect */

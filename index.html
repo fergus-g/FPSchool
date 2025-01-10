@@ -11,12 +11,11 @@
       <h1>FPSchool</h1>
     </div>
     <div class="search-container">
-      <input
-        type="search"
-        name="search"
-        id="searchbar"
-        placeholder="Search by name or favourite weapon..."
-      />
+      <select id="heading-dropdown">
+        <option value="" disabled selected>Select Heading</option>
+      </select>
+      <input type="text" id="searchbar" placeholder="Enter search term..." />
+      <button class="search-button" id="search-button">Search</button>
     </div>
     <div class="button-container">
       <button id="create-player-btn">Create New Player</button>
@@ -28,7 +27,13 @@
     <div id="playerFormContainer" style="display: none">
       <form id="playerForm">
         <label for="player_name">Player Name:</label>
-        <input type="text" id="player_name" name="player_name" required />
+        <input
+          type="text"
+          id="player_name"
+          name="player_name"
+          required
+          value=""
+        />
 
         <label for="kda">K/D/A:</label>
         <input type="text" id="kda" name="kda" required />
@@ -54,7 +59,15 @@
           required
         />
 
-        <button type="submit">Submit</button>
+        <button
+          style="display: block"
+          class="show"
+          id="submit-btn"
+          type="submit"
+        >
+          Submit
+        </button>
+        <button style="display: none" id="update">Update</button>
         <button type="button" id="cancelForm">Cancel</button>
       </form>
     </div>
