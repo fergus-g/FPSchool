@@ -69,7 +69,7 @@ body {
 .search-button {
   padding: 10px 20px;
   font-size: 1rem;
-  border-radius: 25px;
+  border-radius: 10px;
   border: none;
   background-color: #007bff;
   color: white;
@@ -103,6 +103,15 @@ button {
   transition: background-color 0.3s ease;
 }
 
+#edit-btn {
+  background-color: green;
+  width: 52.58px;
+}
+
+#delete-btn {
+  background-color: red;
+}
+
 button:hover {
   background-color: #0056b3;
 }
@@ -123,7 +132,7 @@ table {
 th,
 td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
   border: 1px solid #ddd;
 }
 

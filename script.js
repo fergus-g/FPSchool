@@ -3,6 +3,7 @@ const createPlayerButton = document.getElementById("create-player-btn");
 const createMapButton = document.getElementById("create-map-btn");
 const playerFormContainer = document.getElementById("playerFormContainer");
 const playerForm = document.getElementById("playerForm");
+const mapForm = document.getElementById("mapForm");
 const cancelFormButton = document.getElementById("cancelForm");
 const showMapsButton = document.getElementById("map-btn");
 const editPlayerButton = document.getElementById("edit-btn");
@@ -14,6 +15,7 @@ const playerBestMapValue = document.getElementById("best_map");
 const submitButton = document.getElementById("submit-btn");
 const updateButton = document.getElementById("update");
 const removeButton = document.getElementById("delete");
+const mapSubmitButton = document.getElementById("map-submit");
 
 let database = "players";
 let showDelete = "none";
@@ -100,7 +102,10 @@ async function showAllPlayers() {
         if (columnData === "actions" && database === "players") {
           // Add Edit and Delete buttons only in "players" state
           const editButton = document.createElement("button");
-          editButton.textContent = "Edit";
+          const editIcon = document.createElement("i");
+          editIcon.className = "fa fa-pencil";
+          editButton.appendChild(editIcon);
+
           editButton.setAttribute("id", "edit-btn");
           editButton.addEventListener("click", () => {
             if (mapFormContainer.style.display != "none") {
@@ -120,13 +125,16 @@ async function showAllPlayers() {
 
             updateButton.setAttribute("data-player-id", player.id);
 
-            // if (player.id === pla)
             playerFormContainer.style.display =
               playerFormContainer.style.display === "none" ? "block" : "none";
           });
 
           const deleteButton = document.createElement("button");
-          deleteButton.textContent = "Delete";
+          const deleteIcon = document.createElement("i");
+          deleteIcon.className = "fa fa-trash";
+          deleteButton.appendChild(deleteIcon);
+
+          deleteButton.setAttribute("id", "delete-btn");
           deleteButton.onclick = () => {
             if (mapFormContainer.style.display != "none") {
               mapFormContainer.style.display = "none";
@@ -285,7 +293,7 @@ cancelFormButton.addEventListener("click", () => {
   playerFormContainer.style.display = "none";
 });
 
-submitButton.addEventListener("click", async (event) => {
+mapSubmitButton.addEventListener("click", async (event) => {
   event.preventDefault();
   const formData = {
     map_name: document.getElementById("map_name").value,
@@ -302,15 +310,15 @@ submitButton.addEventListener("click", async (event) => {
     });
 
     if (response.ok) {
-      alert("Player created successfully!");
-      playerForm.reset();
-      playerFormContainer.style.display = "none";
-      showAllPlayers();
+      alert("Map created successfully!");
+      mapForm.reset();
+      mapFormContainer.style.display = "none";
+      showAllMaps();
     } else {
       throw new Error("Failed to create map");
     }
   } catch (error) {
-    console.error("Error creating player:", error);
+    console.error("Error creating map:", error);
     alert("Error creating player. Please try again.");
   }
 });
