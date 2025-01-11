@@ -13,8 +13,10 @@ const playerAverageWinRateValue = document.getElementById("average_winrate");
 const playerBestMapValue = document.getElementById("best_map");
 const submitButton = document.getElementById("submit-btn");
 const updateButton = document.getElementById("update");
+const removeButton = document.getElementById("delete");
 
 let database = "players";
+let showDelete = "none";
 let showUpdate = "none";
 lbButton.textContent = "Show Leaderboard";
 
@@ -45,7 +47,6 @@ async function showAllPlayers() {
     const response = await fetch(`http://localhost:3000/${database}`);
     const json = await response.json();
     const players = json.data;
-    console.log(players);
 
     const tableContainer = document.getElementsByClassName("list")[0];
     tableContainer.innerHTML = "";
@@ -106,6 +107,7 @@ async function showAllPlayers() {
               mapFormContainer.style.display = "none";
             }
             submitButton.style.display = "none";
+            removeButton.style.display = "none";
             showUpdate = "block";
             updateButton.style.display = showUpdate;
             playerNameValue.value = player.player_name;
@@ -113,14 +115,40 @@ async function showAllPlayers() {
             playerFavouriteWeaponValue.value = player.favourite_weapon;
             playerBestMapValue.value = player.best_map;
             playerAverageWinRateValue.value = player.average_winrate;
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+            updateButton.setAttribute("data-player-id", player.id);
+
+            // if (player.id === pla)
             playerFormContainer.style.display =
               playerFormContainer.style.display === "none" ? "block" : "none";
           });
-          // updateButton.addEventListener("click", () => editPlayer(player.id));
 
           const deleteButton = document.createElement("button");
           deleteButton.textContent = "Delete";
-          deleteButton.onclick = () => deletePlayer(player.id);
+          deleteButton.onclick = () => {
+            if (mapFormContainer.style.display != "none") {
+              mapFormContainer.style.display = "none";
+            }
+            submitButton.style.display = "none";
+            updateButton.style.display = "none";
+            showDelete = "block";
+            removeButton.style.display = showDelete;
+            playerNameValue.value = player.player_name;
+            playerKDAValue.value = player.kda;
+            playerFavouriteWeaponValue.value = player.favourite_weapon;
+            playerBestMapValue.value = player.best_map;
+            playerAverageWinRateValue.value = player.average_winrate;
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+            removeButton.setAttribute("data-player-id", player.id);
+
+            // if (player.id === pla)
+            playerFormContainer.style.display =
+              playerFormContainer.style.display === "none" ? "block" : "none";
+          };
 
           cell.appendChild(editButton);
           cell.appendChild(deleteButton);
@@ -194,6 +222,7 @@ createPlayerButton.addEventListener("click", () => {
     mapFormContainer.style.display = "none";
   }
   if (submitButton.style.display === "none") {
+    removeButton.style.display = "none";
     updateButton.style.display = "none";
     submitButton.style.display = "block";
   }
@@ -256,7 +285,7 @@ cancelFormButton.addEventListener("click", () => {
   playerFormContainer.style.display = "none";
 });
 
-playerForm.addEventListener("click", async (event) => {
+submitButton.addEventListener("click", async (event) => {
   event.preventDefault();
   const formData = {
     map_name: document.getElementById("map_name").value,
@@ -289,19 +318,28 @@ playerForm.addEventListener("click", async (event) => {
 
 // PATCH REQUEST
 
+updateButton.addEventListener("click", () => {
+  const playerId = updateButton.getAttribute("data-player-id");
+
+  if (playerId) {
+    editPlayer(playerId);
+  } else {
+    console.error("No player ID found. Update operation aborted.");
+  }
+});
+
 async function editPlayer(id) {
-  // calls the api
-  // Opens a prompt to input update to player details
-  // takes details and posts to API
+  // Capture form data
   const formData = {
-    player_name: playerNameValue.value,
-    kda: playerKDAValue.value,
-    favourite_weapon: playerFavouriteWeaponValue.value,
-    best_map: playerBestMapValue.value,
-    average_winrate: playerAverageWinRateValue.value,
+    player_name: document.getElementById("player_name").value,
+    kda: document.getElementById("kda").value,
+    favourite_weapon: document.getElementById("favourite_weapon").value,
+    best_map: document.getElementById("best_map").value,
+    average_winrate: document.getElementById("average_winrate").value,
   };
 
   try {
+    // Send POST request to the backend
     const response = await fetch(`http://localhost:3000/players/${id}`, {
       method: "PATCH",
       headers: {
@@ -309,6 +347,7 @@ async function editPlayer(id) {
       },
       body: JSON.stringify(formData),
     });
+
     if (response.ok) {
       alert("Player updated successfully!");
       playerForm.reset();
@@ -333,9 +372,41 @@ async function editMap() {
 
 // DELETE REQUEST
 
-async function deletePlayer(id) {
-  // gets the id of the specific user and passes to the API call at id
-  const response = await fetch("http://localhost:3000/players/");
+removeButton.addEventListener("click", () => {
+  const playerId = removeButton.getAttribute("data-player-id");
+  const playerName = playerNameValue.value;
+
+  if (playerId) {
+    deletePlayer(playerId, playerName);
+  } else {
+    console.error("No player ID found. Update operation aborted.");
+  }
+});
+
+async function deletePlayer(id, playerName) {
+  try {
+    const isConfirmed = confirm(
+      `Are you sure you want to delete "${playerName}"?`
+    );
+    if (!isConfirmed) {
+      return;
+    }
+    // gets the id of the specific user and passes to the API call at id
+    const response = await fetch(`http://localhost:3000/players/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      alert(`${playerName} has been successfully deleted!`);
+      playerForm.reset();
+      playerFormContainer.style.display = "none";
+      showAllPlayers();
+    } else {
+      throw new Error("Failed to delete player");
+    }
+  } catch (error) {
+    console.error("Error deleting player:", error);
+    alert("Error deleting player. Please try again.");
+  }
 }
 
 // DELETE REQUEST
