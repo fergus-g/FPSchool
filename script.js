@@ -17,6 +17,8 @@ const updateButton = document.getElementById("update");
 const removeButton = document.getElementById("delete");
 const mapSubmitButton = document.getElementById("map-submit");
 
+const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com/";
+
 let database = "players";
 let showDelete = "none";
 let showUpdate = "none";
@@ -46,7 +48,7 @@ async function showLeaderBoard() {
 async function showAllPlayers() {
   try {
     // Fetch data from the API
-    const response = await fetch(`http://localhost:3000/${database}`);
+    const response = await fetch(`${url}${database}`);
     const json = await response.json();
     const players = json.data;
 
@@ -182,7 +184,7 @@ async function showAllPlayers() {
 async function showAllMaps() {
   try {
     // Fetch data from the API
-    const response = await fetch("http://localhost:3000/maps");
+    const response = await fetch(`${url}/maps`);
     const json = await response.json();
     const maps = json.data;
 
@@ -258,7 +260,7 @@ submitButton.addEventListener("click", async (event) => {
 
   try {
     // Send POST request to the backend
-    const response = await fetch("http://localhost:3000/players", {
+    const response = await fetch(`${url}/players`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -301,7 +303,7 @@ mapSubmitButton.addEventListener("click", async (event) => {
 
   try {
     // Send POST request to the backend
-    const response = await fetch("http://localhost:3000/maps", {
+    const response = await fetch(`${url}/maps`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -348,7 +350,7 @@ async function editPlayer(id) {
 
   try {
     // Send POST request to the backend
-    const response = await fetch(`http://localhost:3000/players/${id}`, {
+    const response = await fetch(`${url}/players/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -400,7 +402,7 @@ async function deletePlayer(id, playerName) {
       return;
     }
     // gets the id of the specific user and passes to the API call at id
-    const response = await fetch(`http://localhost:3000/players/${id}`, {
+    const response = await fetch(`${url}players/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -450,7 +452,7 @@ document.getElementById("search-button").addEventListener("click", async () => {
   try {
     // Encode the query parameter
     const queryParam = `${selectedHeading}=${encodeURIComponent(searchValue)}`;
-    const response = await fetch(`http://localhost:3000/players?${queryParam}`);
+    const response = await fetch(`${url}players?${queryParam}`);
 
     if (!response.ok) throw new Error("Failed to perform search");
 
