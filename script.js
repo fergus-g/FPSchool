@@ -17,7 +17,7 @@ const updateButton = document.getElementById("update");
 const removeButton = document.getElementById("delete");
 const mapSubmitButton = document.getElementById("map-submit");
 
-const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com";
+const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com/";
 
 let database = "players";
 let showDelete = "none";
@@ -49,6 +49,7 @@ async function showAllPlayers() {
   try {
     // Fetch data from the API
     const response = await fetch(`${url}${database}`);
+    console.log(response);
     const json = await response.json();
     const players = json.data;
 
