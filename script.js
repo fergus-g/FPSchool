@@ -48,7 +48,7 @@ async function showLeaderBoard() {
 async function showAllPlayers() {
   try {
     // Fetch data from the API
-    const response = await fetch(`${url}${database}`);
+    const response = await fetch(`${url}/${database}`);
     const json = await response.json();
     const players = json.data;
 
