@@ -49,7 +49,7 @@ async function showAllPlayers() {
   try {
     // Fetch data from the API
     const response = await fetch(`${url}${database}`);
-    console.log(response);
+
     const json = await response.json();
     const players = json.data;
 
@@ -329,7 +329,8 @@ mapSubmitButton.addEventListener("click", async (event) => {
 
 // PATCH REQUEST
 
-updateButton.addEventListener("click", () => {
+updateButton.addEventListener("click", (event) => {
+  event.preventDefault();
   const playerId = updateButton.getAttribute("data-player-id");
 
   if (playerId) {
@@ -375,22 +376,20 @@ async function editPlayer(id) {
 
 // PATCH REQUEST
 
-async function editMap() {
-  // calls the api
-  // Opens a prompt to input update to map details
-  // takes details and posts to API
-}
-
 // DELETE REQUEST
 
-removeButton.addEventListener("click", () => {
+removeButton.addEventListener("click", async (event) => {
+  event.preventDefault();
   const playerId = removeButton.getAttribute("data-player-id");
   const playerName = playerNameValue.value;
 
   if (playerId) {
-    deletePlayer(playerId, playerName);
+    console.log(
+      `Attempting to delete player with ID: ${playerId} and Name: ${playerName}`
+    );
+    await deletePlayer(playerId, playerName);
   } else {
-    console.error("No player ID found. Update operation aborted.");
+    console.error("No player ID found. Delete operation aborted.");
   }
 });
 
@@ -405,7 +404,11 @@ async function deletePlayer(id, playerName) {
     // gets the id of the specific user and passes to the API call at id
     const response = await fetch(`${url}players/${id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    console.log(response);
     if (response.ok) {
       alert(`${playerName} has been successfully deleted!`);
       playerForm.reset();
