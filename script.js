@@ -189,6 +189,15 @@ async function showAllPlayers() {
   }
 }
 
+async function getAllMaps() {
+  try {
+    const response = await fetch(`${url}maps`);
+    const json = await response.json();
+    const maps = json.data;
+    mapData = maps;
+  } catch (error) {}
+}
+
 // GET All maps
 async function showAllMaps() {
   try {
@@ -196,7 +205,6 @@ async function showAllMaps() {
     const response = await fetch(`${url}maps`);
     const json = await response.json();
     const maps = json.data;
-    mapData = maps;
 
     // Get the container to display the table
     const tableContainer = document.getElementsByClassName("list")[0];
@@ -561,7 +569,7 @@ function createGame() {
     gameLog.push(
       `${killer.player_name} killed ${victim.player_name} with ${killer.favourite_weapon}`
     );
-    // modalTitle.textContent = `Players remaining: ${remainingPlayers.length}`;
+
     // Remove the victim from the remaining players
     remainingPlayers.splice(victimIndex, 1);
 
@@ -602,7 +610,7 @@ function typeGameLog(gameLog) {
 }
 
 playButton.addEventListener("click", async () => {
-  await showAllMaps();
+  await getAllMaps();
   const maps = mapData; // Replace with actual map data
 
   const randomMap = maps[Math.floor(Math.random() * maps.length)].map_name;
