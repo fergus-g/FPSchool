@@ -79,7 +79,7 @@ async function showAllPlayers() {
         "Favourite Weapon",
         "Best Map",
         "Average Winrate",
-        "Actions",
+        // "Actions",
       ];
       displayColumns = [
         (player) => player.player_name,
@@ -87,7 +87,7 @@ async function showAllPlayers() {
         (player) => player.favourite_weapon,
         (player) => player.best_map,
         (player) => `${player.average_winrate}%`,
-        () => "actions",
+        // () => "actions",
       ];
       populateSearchHeadings(headers.slice(0, -1));
     } else if (database === "leaderboard") {
@@ -157,10 +157,9 @@ async function showAllPlayers() {
             showDelete = "block";
             removeButton.style.display = showDelete;
             playerNameValue.value = player.player_name;
-            playerKDAValue.value = player.kda;
+
             playerFavouriteWeaponValue.value = player.favourite_weapon;
             playerBestMapValue.value = player.best_map;
-            playerAverageWinRateValue.value = player.average_winrate;
 
             window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -234,9 +233,7 @@ async function showAllMaps() {
 
 createPlayerButton.addEventListener("click", () => {
   playerNameValue.value = "";
-  playerKDAValue.value = "";
   playerBestMapValue.value = "";
-  playerAverageWinRateValue.value = "";
   playerFavouriteWeaponValue.value = "";
 
   if (mapFormContainer.style.display != "none") {
@@ -263,10 +260,9 @@ submitButton.addEventListener("click", async (event) => {
   // Capture form data
   const formData = {
     player_name: document.getElementById("player_name").value,
-    kda: document.getElementById("kda").value,
+
     favourite_weapon: document.getElementById("favourite_weapon").value,
     best_map: document.getElementById("best_map").value,
-    average_winrate: document.getElementById("average_winrate").value,
   };
 
   try {
