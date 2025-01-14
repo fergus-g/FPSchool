@@ -16,12 +16,16 @@ const submitButton = document.getElementById("submit-btn");
 const updateButton = document.getElementById("update");
 const removeButton = document.getElementById("delete");
 const mapSubmitButton = document.getElementById("map-submit");
-
+const playButton = document.getElementById("play-btn");
+const modal = document.getElementById("modal");
+const closeButton = document.getElementsByClassName("close-button")[0];
+const modalText = document.getElementById("modal-text");
 const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com/";
 
 let database = "players";
 let showDelete = "none";
 let showUpdate = "none";
+let playersData = [];
 lbButton.textContent = "Show Leaderboard";
 
 window.addEventListener("load", (event) => {
@@ -52,6 +56,7 @@ async function showAllPlayers() {
 
     const json = await response.json();
     const players = json.data;
+    playersData = players;
 
     const tableContainer = document.getElementsByClassName("list")[0];
     tableContainer.innerHTML = "";
@@ -156,7 +161,6 @@ async function showAllPlayers() {
 
             removeButton.setAttribute("data-player-id", player.id);
 
-            // if (player.id === pla)
             playerFormContainer.style.display =
               playerFormContainer.style.display === "none" ? "block" : "none";
           };
@@ -510,3 +514,81 @@ function displaySearchResults(results) {
 
   tableContainer.appendChild(table);
 }
+
+function showModal() {
+  modal.style.display = "block";
+}
+
+function hideModal() {
+  modal.style.display = "none";
+}
+
+// When the user clicks on <span> (x), close the modal
+closeButton.onclick = function () {
+  hideModal();
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == modal) {
+    hideModal();
+  }
+};
+
+function createGame() {
+  let gameLog = [];
+  let remainingPlayers = [...playersData]; // Create a copy of playersData
+
+  while (remainingPlayers.length > 1) {
+    // Randomly select a killer and a victim
+    const killerIndex = Math.floor(Math.random() * remainingPlayers.length);
+    let victimIndex;
+    do {
+      victimIndex = Math.floor(Math.random() * remainingPlayers.length);
+    } while (victimIndex === killerIndex);
+
+    const killer = remainingPlayers[killerIndex];
+    const victim = remainingPlayers[victimIndex];
+
+    // Log the kill
+    gameLog.push(
+      `${killer.player_name} killed ${victim.player_name} with ${killer.favourite_weapon}`
+    );
+
+    // Remove the victim from the remaining players
+    remainingPlayers.splice(victimIndex, 1);
+  }
+
+  // Log the winner
+  if (remainingPlayers.length === 1) {
+    gameLog.push(`${remainingPlayers[0].player_name} is the winner!`);
+  }
+
+  return gameLog;
+}
+
+function typeGameLog(gameLog) {
+  let index = 0;
+
+  function typeNextEntry() {
+    if (index < gameLog.length) {
+      const entry = document.createElement("div");
+      entry.textContent = gameLog[index];
+      modalText.appendChild(entry);
+      index++;
+
+      // Random delay between 1 to 3 seconds
+      const delay = Math.random() * 2000 + 1000;
+      setTimeout(typeNextEntry, delay);
+    }
+  }
+
+  typeNextEntry();
+}
+
+playButton.addEventListener("click", () => {
+  modalText.innerHTML = ""; // Clear previous game log
+  const gameLog = createGame();
+  showModal();
+  typeGameLog(gameLog);
+});
