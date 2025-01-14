@@ -388,9 +388,6 @@ removeButton.addEventListener("click", async (event) => {
   const playerName = playerNameValue.value;
 
   if (playerId) {
-    console.log(
-      `Attempting to delete player with ID: ${playerId} and Name: ${playerName}`
-    );
     await deletePlayer(playerId, playerName);
   } else {
     console.error("No player ID found. Delete operation aborted.");
@@ -412,7 +409,7 @@ async function deletePlayer(id, playerName) {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+
     if (response.ok) {
       alert(`${playerName} has been successfully deleted!`);
       playerForm.reset();
@@ -538,6 +535,7 @@ window.onclick = function (event) {
 function createGame() {
   let gameLog = [];
   let remainingPlayers = [...playersData]; // Create a copy of playersData
+  let previousKiller = null;
 
   while (remainingPlayers.length > 1) {
     // Randomly select a killer and a victim
@@ -551,12 +549,18 @@ function createGame() {
     const victim = remainingPlayers[victimIndex];
 
     // Log the kill
+
     gameLog.push(
       `${killer.player_name} killed ${victim.player_name} with ${killer.favourite_weapon}`
     );
+    if (previousKiller && previousKiller.player_name === killer.player_name) {
+      gameLog.push(`${killer.player_name} is on a kill streak`);
+    }
 
     // Remove the victim from the remaining players
     remainingPlayers.splice(victimIndex, 1);
+
+    previousKiller = killer;
   }
 
   // Log the winner
