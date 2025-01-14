@@ -43,8 +43,10 @@ showMapsButton.addEventListener("click", showAllMaps);
 async function showLeaderBoard() {
   database = database === "players" ? "leaderboard" : "players";
   if (database === "players") {
+    playButton.style.display = "";
     lbButton.textContent = "Show Leaderboard";
   } else {
+    playButton.style.display = "none";
     lbButton.textContent = "Show all players";
   }
   showAllPlayers();
@@ -552,6 +554,7 @@ function createGame() {
 
     const killer = remainingPlayers[killerIndex];
     const victim = remainingPlayers[victimIndex];
+    addPlayerLoss(victim.id);
 
     // Check if the previous killer is the same as the current killer
     if (previousKiller && previousKiller.player_name === killer.player_name) {
@@ -575,6 +578,7 @@ function createGame() {
   // Log the winner
   if (remainingPlayers.length === 1) {
     winner = remainingPlayers[0];
+    addPlayerWin(winner.id);
     gameLog.push(`${remainingPlayers[0].player_name} is the winner!`);
   }
 
@@ -615,3 +619,41 @@ playButton.addEventListener("click", async () => {
   showModal();
   typeGameLog(gameLog);
 });
+
+async function addPlayerLoss(id) {
+  try {
+    const response = await fetch(`${url}players/loss/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add loss");
+    }
+  } catch (error) {
+    console.error("Error adding loss:", error);
+    alert("Error adding loss player. Please try again.");
+  }
+}
+
+async function addPlayerWin(id) {
+  try {
+    const response = await fetch(`${url}players/win/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add win");
+    }
+  } catch (error) {
+    console.error("Error adding win:", error);
+    alert("Error adding win player. Please try again.");
+  }
+}
