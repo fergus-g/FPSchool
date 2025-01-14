@@ -249,7 +249,6 @@ tr:nth-child(odd) {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
@@ -259,7 +258,10 @@ tr:nth-child(odd) {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  border-radius: 10px; /* Rounded edges */
+  width: 50%; /* Smaller width */
+  max-width: 600px; /* Maximum width */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Add some shadow */
 }
 
 /* Close button */
@@ -281,4 +283,15 @@ tr:nth-child(odd) {
 #modal-text {
   font-family: "Courier New", Courier, monospace;
   white-space: pre-wrap; /* Preserve whitespace */
+  margin-top: 10px; /* Add some space between title and text */
+}
+
+/* Horizontal line */
+.modal-content hr {
+  border: 0;
+  height: 3px; /* Thicker line */
+  background: #ccc;
+  margin: 20px 0; /* Add more margin around the line */
+  width: calc(100% + 40px); /* Extend to the edges of the modal */
+  margin-left: -20px; /* Adjust to align with the modal edges */
 }
