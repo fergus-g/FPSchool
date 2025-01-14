@@ -20,12 +20,15 @@ const playButton = document.getElementById("play-btn");
 const modal = document.getElementById("modal");
 const closeButton = document.getElementsByClassName("close-button")[0];
 const modalText = document.getElementById("modal-text");
+const modalTitle = document.getElementById("modal-title");
 const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com/";
 
 let database = "players";
 let showDelete = "none";
 let showUpdate = "none";
 let playersData = [];
+let winner = [];
+let mapData = [];
 lbButton.textContent = "Show Leaderboard";
 
 window.addEventListener("load", (event) => {
@@ -40,8 +43,10 @@ showMapsButton.addEventListener("click", showAllMaps);
 async function showLeaderBoard() {
   database = database === "players" ? "leaderboard" : "players";
   if (database === "players") {
+    playButton.style.display = "";
     lbButton.textContent = "Show Leaderboard";
   } else {
+    playButton.style.display = "none";
     lbButton.textContent = "Show all players";
   }
   showAllPlayers();
@@ -192,6 +197,7 @@ async function showAllMaps() {
     const response = await fetch(`${url}maps`);
     const json = await response.json();
     const maps = json.data;
+    mapData = maps;
 
     // Get the container to display the table
     const tableContainer = document.getElementsByClassName("list")[0];
@@ -535,7 +541,8 @@ window.onclick = function (event) {
 function createGame() {
   let gameLog = [];
   let remainingPlayers = [...playersData]; // Create a copy of playersData
-  let previousKiller = null;
+  let previousKiller = null; // Variable to store the previous killer
+  let winner = null;
 
   while (remainingPlayers.length > 1) {
     // Randomly select a killer and a victim
@@ -547,28 +554,35 @@ function createGame() {
 
     const killer = remainingPlayers[killerIndex];
     const victim = remainingPlayers[victimIndex];
+    addPlayerLoss(victim.id);
 
-    // Log the kill
-
-    gameLog.push(
-      `${killer.player_name} killed ${victim.player_name} with ${killer.favourite_weapon}`
-    );
+    // Check if the previous killer is the same as the current killer
     if (previousKiller && previousKiller.player_name === killer.player_name) {
       gameLog.push(`${killer.player_name} is on a kill streak`);
     }
 
+    // Log the kill
+    gameLog.push(
+      `${killer.player_name} killed ${victim.player_name} with ${killer.favourite_weapon}`
+    );
+    // modalTitle.textContent = `Players remaining: ${remainingPlayers.length}`;
     // Remove the victim from the remaining players
     remainingPlayers.splice(victimIndex, 1);
 
+    // Update the previous killer
     previousKiller = killer;
+
+    // Update the title with the remaining players count
   }
 
   // Log the winner
   if (remainingPlayers.length === 1) {
+    winner = remainingPlayers[0];
+    addPlayerWin(winner.id);
     gameLog.push(`${remainingPlayers[0].player_name} is the winner!`);
   }
 
-  return gameLog;
+  return { gameLog, winner };
 }
 
 function typeGameLog(gameLog) {
@@ -579,6 +593,7 @@ function typeGameLog(gameLog) {
       const entry = document.createElement("div");
       entry.textContent = gameLog[index];
       modalText.appendChild(entry);
+
       index++;
 
       // Random delay between 1 to 3 seconds
@@ -590,9 +605,55 @@ function typeGameLog(gameLog) {
   typeNextEntry();
 }
 
-playButton.addEventListener("click", () => {
+playButton.addEventListener("click", async () => {
+  await showAllMaps();
+  const maps = mapData; // Replace with actual map data
+
+  const randomMap = maps[Math.floor(Math.random() * maps.length)].map_name;
+
+  // Set the modal title
+  modalTitle.textContent = `Players: ${playersData.length}, Map: ${randomMap}`;
   modalText.innerHTML = ""; // Clear previous game log
-  const gameLog = createGame();
+  const { gameLog, winner } = createGame();
+  console.log("Winner:", winner);
   showModal();
   typeGameLog(gameLog);
 });
+
+async function addPlayerLoss(id) {
+  try {
+    const response = await fetch(`${url}players/loss/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add loss");
+    }
+  } catch (error) {
+    console.error("Error adding loss:", error);
+    alert("Error adding loss player. Please try again.");
+  }
+}
+
+async function addPlayerWin(id) {
+  try {
+    const response = await fetch(`${url}players/win/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add win");
+    }
+  } catch (error) {
+    console.error("Error adding win:", error);
+    alert("Error adding win player. Please try again.");
+  }
+}
