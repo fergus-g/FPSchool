@@ -299,3 +299,15 @@ tr:nth-child(odd) {
   width: calc(100% + 40px); /* Extend to the edges of the modal */
   margin-left: -20px; /* Adjust to align with the modal edges */
 }
+
+/* Style for Font Awesome chevron-down icon */
+.fa-chevron-down {
+  color: #888; /* Change the color */
+  font-size: 12px; /* Change the size */
+  margin-left: 5px; /* Add some margin to the left */
+  transition: transform 0.3s ease; /* Add a transition for rotation */
+}
+
+.fa-chevron-down.asc {
+  transform: rotate(180deg); /* Rotate the icon for ascending order */
+}

@@ -118,6 +118,8 @@ async function showAllPlayers(sortedURL) {
           // Toggle the sorting direction
           direction = direction === "ASC" ? "DESC" : "ASC";
           sortByHeader(header.toLowerCase().replace(/ /g, "_"), direction);
+
+          // Toggle the asc class on the chevron icon
         });
       }
     });
