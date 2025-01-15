@@ -29,6 +29,8 @@ let showUpdate = "none";
 let playersData = [];
 let winner = [];
 let mapData = [];
+let direction = "DESC";
+
 lbButton.textContent = "Show Leaderboard";
 
 window.addEventListener("load", (event) => {
@@ -54,13 +56,17 @@ async function showLeaderBoard() {
 
 // GET REQUEST
 // get all the players
-async function showAllPlayers() {
+async function showAllPlayers(sortedURL) {
+  let response = "";
   try {
     // Fetch data from the API
-    const response = await fetch(`${url}${database}`);
+    sortedURL
+      ? (response = await fetch(`${sortedURL}`))
+      : (response = await fetch(`${url}${database}`));
 
     const json = await response.json();
     const players = json.data;
+
     playersData = players;
 
     const tableContainer = document.getElementsByClassName("list")[0];
@@ -89,7 +95,7 @@ async function showAllPlayers() {
         (player) => `${player.average_winrate}%`,
         // () => "actions",
       ];
-      populateSearchHeadings(headers.slice(0, -1));
+      populateSearchHeadings(["Player Name", "Favourite Weapon", "Best Map"]);
     } else if (database === "leaderboard") {
       headers = ["Player Name", "Average Winrate"];
       displayColumns = [
@@ -100,8 +106,20 @@ async function showAllPlayers() {
     const headerRow = document.createElement("tr");
     headers.forEach((header) => {
       const th = document.createElement("th");
+      const chevron = document.createElement("i");
+      chevron.className = "fa fa-chevron-down";
+      th.className = header;
       th.textContent = header;
       headerRow.appendChild(th);
+      if (header != "K/D") {
+        th.appendChild(chevron);
+
+        th.addEventListener("click", () => {
+          // Toggle the sorting direction
+          direction = direction === "ASC" ? "DESC" : "ASC";
+          sortByHeader(header.toLowerCase().replace(/ /g, "_"), direction);
+        });
+      }
     });
     table.appendChild(headerRow);
 
@@ -112,7 +130,7 @@ async function showAllPlayers() {
         const cell = document.createElement("td");
         const columnData = columnFunction(player);
         if (headers[index] === "K/D") {
-          cell.classList.add("kd-column"); // Add class to K/D cells
+          cell.classList.add("kd-column");
         }
 
         if (columnData === "actions" && database === "players") {
@@ -494,7 +512,7 @@ function displaySearchResults(results) {
     database === "players"
       ? [
           "Player Name",
-          "K/D   ",
+          "K/D",
           "Favourite Weapon",
           "Best Map",
           "Average Winrate",
@@ -625,7 +643,7 @@ playButton.addEventListener("click", async () => {
   modalTitle.textContent = `Players: ${playersData.length}, Map: ${randomMap}`;
   modalText.innerHTML = ""; // Clear previous game log
   const { gameLog, winner } = createGame();
-  console.log("Winner:", winner);
+
   showModal();
   typeGameLog(gameLog);
 });
@@ -702,4 +720,12 @@ async function addDeath(id) {
     console.error("Error adding win:", error);
     alert("Error adding win player. Please try again.");
   }
+}
+
+async function sortByHeader(header, direction) {
+  let sortedURL = `${url}players/sort?${header}=true&direction=${direction}`;
+  direction = direction;
+  direction === "DESC" ? (direction = "ASC") : (direction = "DESC");
+
+  showAllPlayers(sortedURL);
 }
