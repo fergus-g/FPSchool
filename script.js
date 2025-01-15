@@ -75,7 +75,7 @@ async function showAllPlayers() {
     if (database === "players") {
       headers = [
         "Player Name",
-        "K/D/A",
+        "K/D",
         "Favourite Weapon",
         "Best Map",
         "Average Winrate",
@@ -83,7 +83,7 @@ async function showAllPlayers() {
       ];
       displayColumns = [
         (player) => player.player_name,
-        (player) => player.kda,
+        (player) => `${player.kills} / ${player.deaths}`,
         (player) => player.favourite_weapon,
         (player) => player.best_map,
         (player) => `${player.average_winrate}%`,
@@ -111,6 +111,9 @@ async function showAllPlayers() {
       displayColumns.forEach((columnFunction, index) => {
         const cell = document.createElement("td");
         const columnData = columnFunction(player);
+        if (headers[index] === "K/D") {
+          cell.classList.add("kd-column"); // Add class to K/D cells
+        }
 
         if (columnData === "actions" && database === "players") {
           // Add Edit and Delete buttons only in "players" state
@@ -491,7 +494,7 @@ function displaySearchResults(results) {
     database === "players"
       ? [
           "Player Name",
-          "K/D/A",
+          "K/D   ",
           "Favourite Weapon",
           "Best Map",
           "Average Winrate",
@@ -533,6 +536,7 @@ function hideModal() {
 // When the user clicks on <span> (x), close the modal
 closeButton.onclick = function () {
   hideModal();
+  showAllPlayers();
 };
 
 // When the user clicks anywhere outside of the modal, close it
@@ -557,8 +561,10 @@ function createGame() {
     } while (victimIndex === killerIndex);
 
     const killer = remainingPlayers[killerIndex];
+    addKill(killer.id);
     const victim = remainingPlayers[victimIndex];
     addPlayerLoss(victim.id);
+    addDeath(victim.id);
 
     // Check if the previous killer is the same as the current killer
     if (previousKiller && previousKiller.player_name === killer.player_name) {
@@ -652,6 +658,42 @@ async function addPlayerWin(id) {
       },
     });
 
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add win");
+    }
+  } catch (error) {
+    console.error("Error adding win:", error);
+    alert("Error adding win player. Please try again.");
+  }
+}
+
+async function addKill(id) {
+  try {
+    const response = await fetch(`${url}players/kill/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+    } else {
+      throw new Error("Failed to add win");
+    }
+  } catch (error) {
+    console.error("Error adding win:", error);
+    alert("Error adding win player. Please try again.");
+  }
+}
+
+async function addDeath(id) {
+  try {
+    const response = await fetch(`${url}players/death/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (response.ok) {
     } else {
       throw new Error("Failed to add win");

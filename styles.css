@@ -149,6 +149,10 @@ tr:nth-child(odd) {
   background-color: white;
 }
 
+/* Define the width for the K/D column */
+.kd-column {
+  width: 150px; /* Adjust the width as needed */
+}
 /* Form styling */
 #playerFormContainer,
 #mapFormContainer {
