@@ -21,7 +21,7 @@ const modal = document.getElementById("modal");
 const closeButton = document.getElementsByClassName("close-button")[0];
 const modalText = document.getElementById("modal-text");
 const modalTitle = document.getElementById("modal-title");
-const url = "https://radiant-sierra-63820-be1933a6f975.herokuapp.com/";
+const url = "https://fps-school-1be54a8706af.herokuapp.com/";
 
 let database = "players";
 let showDelete = "none";
