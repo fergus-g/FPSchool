@@ -21,7 +21,7 @@ const modal = document.getElementById("modal");
 const closeButton = document.getElementsByClassName("close-button")[0];
 const modalText = document.getElementById("modal-text");
 const modalTitle = document.getElementById("modal-title");
-const url = "https://fps-school-1be54a8706af.herokuapp.com/";
+const url = "https://fpsschoolbackend.azurewebsites.net/";
 
 let database = "players";
 let showDelete = "none";
